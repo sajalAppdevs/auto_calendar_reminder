@@ -5,26 +5,43 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:auto_calendar_reminder/domain/domain_export.dart';
+import 'package:auto_calendar_reminder/presentation/widgets/item_reminder_option.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:auto_calendar_reminder/main.dart';
+import 'package:network_image_mock/network_image_mock.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Ensure event data set on widget', (WidgetTester tester) async {
+   await mockNetworkImagesFor(
+      () => tester.pumpWidget(
+        MaterialApp(
+          home: Material(
+            child: ItemReminderOption(
+              option: CalendarEventOption(
+                optionName: "Coffee Break",
+                optionDescription: "Description",
+                icon: "iconUrl",
+                id: "id",
+                dateTime: "Oct 14, 2022",
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.byKey(const Key("id")), findsOneWidget);
+    expect(find.text("Coffee Break"), findsOneWidget);
+    expect(find.text("Description\nOct 14, 2022"), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    final circleAvatarFinder = find.byType(CircleAvatar);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(circleAvatarFinder, findsOneWidget);
+
+    expect(
+      (tester.firstWidget(circleAvatarFinder) as CircleAvatar).backgroundImage,
+      const NetworkImage("iconUrl"),
+    );
   });
 }
