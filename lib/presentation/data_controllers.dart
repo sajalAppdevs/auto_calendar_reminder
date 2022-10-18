@@ -47,7 +47,7 @@ class AppDataController extends BaseDataController<EventOptionList> {
   }
 
   void removeEvent(String id) {
-    _data.removeWhere((element) => element.id == id);
+    state.data.removeWhere((element) => element.id == id);
     notifyListeners();
   }
 }
