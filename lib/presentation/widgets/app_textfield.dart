@@ -8,8 +8,6 @@ class AppTextField extends StatelessWidget {
     this.inputType,
     this.readOnly,
     this.onTap,
-    this.suffix,
-    this.prefix,
   });
 
   final TextEditingController controller;
@@ -17,8 +15,6 @@ class AppTextField extends StatelessWidget {
   final TextInputType? inputType;
   final bool? readOnly;
   final VoidCallback? onTap;
-  final Widget? suffix;
-  final Widget? prefix;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +27,6 @@ class AppTextField extends StatelessWidget {
         onTap: onTap,
         decoration: InputDecoration(
           labelText: label,
-          prefixIcon: prefix,
-          suffixIcon: suffix,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(width: 2, color: Colors.white),

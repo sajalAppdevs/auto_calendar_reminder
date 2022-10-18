@@ -50,10 +50,12 @@ class AddOptionScreenState extends State<AddOptionScreen> {
         child: Column(
           children: [
             AppTextField(
+              key: const ValueKey('optionNameField'),
               controller: _nameController,
               label: "Option name",
             ),
             AppTextField(
+              key: const ValueKey('descriptionField'),
               controller: _descriptionController,
               label: "Description",
             ),
@@ -61,12 +63,14 @@ class AddOptionScreenState extends State<AddOptionScreen> {
               children: [
                 Flexible(
                   child: AppTextField(
+                    key: const ValueKey('iconField'),
                     controller: _iconLinkController,
                     label: "Icon link",
                   ),
                 ),
                 Flexible(
                   child: AppTextField(
+                    key: const ValueKey('dateField'),
                     onTap: () async {
                       final platform = Theme.of(context).platform;
 
