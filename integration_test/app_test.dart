@@ -6,15 +6,13 @@ import 'home_screen_test.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  
+
   late MockAppRepository repository;
-  // late AppDataController dataController;
   late HomeScreenTestCases homeScreenTestCases;
 
   setUp(
     () {
       repository = MockAppRepository();
-      // dataController = AppDataController(repository: repository);
 
       homeScreenTestCases = HomeScreenTestCases(repository);
     },
@@ -22,12 +20,12 @@ void main() {
   group(
     "Test HomeScreen",
     () {
-      // testWidgets(
-      //   'Ensure CircularProgressIndicator shows in loading state',
-      //   (WidgetTester tester) async {
-      //     await homeScreenTestCases.testLoadingState(tester);
-      //   },
-      // );
+      testWidgets(
+        'Ensure CircularProgressIndicator shows in loading state',
+        (WidgetTester tester) async {
+          await homeScreenTestCases.testLoadingState(tester);
+        },
+      );
 
       testWidgets(
         'Ensure error material banner shows in error state',
@@ -36,19 +34,41 @@ void main() {
         },
       );
 
-      // testWidgets(
-      //   'Ensure error empty list text shows when list empty',
-      //   (WidgetTester tester) async {
-      //     await homeScreenTestCases.testEmptyState(tester);
-      //   },
-      // );
+      testWidgets(
+        'Ensure error empty list text shows when list empty',
+        (WidgetTester tester) async {
+          await homeScreenTestCases.testEmptyState(tester);
+        },
+      );
 
-      // testWidgets(
-      //   'Ensure listview  shows when events successfully loads',
-      //   (WidgetTester tester) async {
-      //     await homeScreenTestCases.testDataLoadedState(tester);
-      //   },
-      // );
+      testWidgets(
+        'Ensure listview  shows when events successfully loads',
+        (WidgetTester tester) async {
+          await homeScreenTestCases.testDataLoadedState(tester);
+        },
+      );
+
+      testWidgets(
+        "Ensure material banner dismissed when cancel button tapped",
+        (tester) async {
+          await homeScreenTestCases
+              .testMaterialBannerDismissedOnCancelPressed(tester);
+        },
+      );
+
+      testWidgets(
+        "Ensure AddOptionsScreen is navigated to when FAB tapped",
+        (tester) async {
+          await homeScreenTestCases.testFABPressed(tester);
+        },
+      );
+
+      testWidgets(
+        "Ensure event item is deleted when ListTile dragged",
+        (tester) async {
+          await homeScreenTestCases.testOnItemDraggedDelete(tester);
+        },
+      );
     },
   );
 }

@@ -1,5 +1,8 @@
 import 'package:auto_calendar_reminder/domain/domain_export.dart';
+import 'package:auto_calendar_reminder/ext.dart';
 import 'package:auto_calendar_reminder/presentation/add_option_screen.dart';
+import 'package:auto_calendar_reminder/presentation/data_controllers.dart';
+import 'package:auto_calendar_reminder/presentation/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -12,13 +15,16 @@ class HomeScreenTestCases {
   final MockAppRepository repository;
 
   Future<void> testLoadingState(WidgetTester tester) async {
-    when(() => repository.getEventOptions()).thenAnswer(
-      (invocation) => Future.value([])..ignore(),
-    );
+    _doWhenGetEventOptionsCalled(data: []);
 
     await TestUtils.pumpApp(tester, repository: repository);
 
-    await tester.pumpAndSettle();
+    final dataController =
+        tester.state(find.byType(HomeScreen)).context.appDataController;
+
+    dataController.state = AppState<EventOptionList>(data: [], loading: true);
+
+    await tester.pump(const Duration(milliseconds: 100));
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     expect(find.text("No events found"), findsNothing);
@@ -27,12 +33,9 @@ class HomeScreenTestCases {
   }
 
   Future<void> testErrorState(WidgetTester tester) async {
-    when(() => repository.getEventOptions())
-        .thenThrow(Exception("An error occurred"));
+    _doWhenGetEventOptionsCalled(error: true);
 
     await TestUtils.pumpApp(tester, repository: repository);
-
-    await tester.pumpAndSettle();
 
     expect(find.byType(MaterialBanner), findsOneWidget);
     expect(find.text("An error occurred"), findsOneWidget);
@@ -43,8 +46,7 @@ class HomeScreenTestCases {
   }
 
   Future<void> testEmptyState(WidgetTester tester) async {
-    when(() => repository.getEventOptions())
-        .thenAnswer((_) => Future.value([]));
+    _doWhenGetEventOptionsCalled(data: []);
 
     await TestUtils.pumpApp(tester, repository: repository);
 
@@ -56,9 +58,7 @@ class HomeScreenTestCases {
   }
 
   Future<void> testDataLoadedState(WidgetTester tester) async {
-    when(() => repository.getEventOptions()).thenAnswer(
-      (_) => Future.value(_data),
-    );
+    _doWhenGetEventOptionsCalled();
 
     await TestUtils.pumpApp(tester, repository: repository);
 
@@ -75,8 +75,7 @@ class HomeScreenTestCases {
 
   Future<void> testMaterialBannerDismissedOnCancelPressed(
       WidgetTester tester) async {
-    when(() => repository.getEventOptions())
-        .thenThrow(Exception("An error occurred"));
+    _doWhenGetEventOptionsCalled(error: true);
 
     await TestUtils.pumpApp(tester, repository: repository);
 
@@ -104,20 +103,24 @@ class HomeScreenTestCases {
 
     await tester.tap(find.byType(FloatingActionButton));
 
-    // await tester.pumpAndSettle();
+    await tester.pumpAndSettle();
 
     expect(navigatorEntries.isNotEmpty, true);
-    expect(navigatorEntries, [AddOptionScreen.pageName]);
+    expect(navigatorEntries, ['/', AddOptionScreen.pageName]);
   }
 
   Future<void> testOnItemDraggedDelete(WidgetTester tester) async {
-    when(() => repository.getEventOptions()).thenAnswer(
-      (_) => Future.value(_data),
+    _doWhenGetEventOptionsCalled();
+
+    when(() => repository.deleteOptions(any())).thenAnswer(
+      (_) => Future.value(true),
     );
 
     await TestUtils.pumpApp(tester, repository: repository);
 
     await tester.drag(find.byKey(const Key("id1")), const Offset(-700, 0));
+
+    await tester.pumpAndSettle();
 
     expect(find.byKey(const Key("id1")), findsNothing);
 
@@ -125,26 +128,41 @@ class HomeScreenTestCases {
     expect(find.byKey(const Key("id3")), findsOneWidget);
   }
 
+  void _doWhenGetEventOptionsCalled(
+      {EventOptionList? data, bool error = false}) {
+    if (error) {
+      when(() => repository.getEventOptions())
+          .thenThrow(Exception("An error occurred"));
+    } else {
+      when(() => repository.getEventOptions()).thenAnswer(
+        (_) => Future.value(data ?? _data),
+      );
+    }
+  }
+
   List<CalendarEventOption> get _data {
     return [
       CalendarEventOption(
-          optionName: "Name1",
-          optionDescription: "Description1",
-          icon: "icon1",
-          id: "id1",
-          dateTime: "12/10/2022"),
+        optionName: "Name1",
+        optionDescription: "Description1",
+        icon: "https://cdn-icons-png.flaticon.com/512/1792/1792931.png",
+        id: "id1",
+        dateTime: "12/10/2022",
+      ),
       CalendarEventOption(
-          optionName: "Name2",
-          optionDescription: "Description2",
-          icon: "icon2",
-          id: "id2",
-          dateTime: "22/12/2022"),
+        optionName: "Name2",
+        optionDescription: "Description2",
+        icon: "https://cdn-icons-png.flaticon.com/512/1792/1792931.png",
+        id: "id2",
+        dateTime: "22/12/2022",
+      ),
       CalendarEventOption(
-          optionName: "Name3",
-          optionDescription: "Description3",
-          icon: "icon3",
-          id: "id3",
-          dateTime: "01/12/2022"),
+        optionName: "Name3",
+        optionDescription: "Description3",
+        icon: "https://cdn-icons-png.flaticon.com/512/1792/1792931.png",
+        id: "id3",
+        dateTime: "01/12/2022",
+      ),
     ];
   }
 }

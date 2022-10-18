@@ -4,20 +4,23 @@ import 'package:auto_calendar_reminder/presentation/data_controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:network_image_mock/network_image_mock.dart';
 
 class MockAppRepository extends Mock implements AppRepository {}
-
-class MockAppDataController extends Mock implements AppDataController {}
 
 class TestUtils {
   static Future<void> pumpApp(WidgetTester tester,
       {required AppRepository repository, NavigatorObserver? observer}) async {
-    await tester.pumpWidget(
-      MyApp(
-        dataController: AppDataController(repository: repository),
-        navigatorObserver: observer,
+    await mockNetworkImagesFor(
+      () => tester.pumpWidget(
+        MyApp(
+          dataController: AppDataController(repository: repository),
+          navigatorObserver: observer,
+        ),
       ),
     );
+
+    await tester.pumpAndSettle();
   }
 }
 
