@@ -10,10 +10,10 @@ class MockAppDataController extends Mock implements AppDataController {}
 
 class TestUtils {
   static Future<void> pumpApp(WidgetTester tester,
-      {required AppDataController dataController}) async {
+      {required AppRepository repository}) async {
     await tester.pumpWidget(
       MyApp(
-        dataController: dataController,
+        dataController: AppDataController(repository: repository),
       ),
     );
   }
