@@ -1,4 +1,5 @@
 import 'package:auto_calendar_reminder/domain/domain_export.dart';
+import 'package:auto_calendar_reminder/presentation/add_option_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -11,9 +12,13 @@ class HomeScreenTestCases {
   final MockAppRepository repository;
 
   Future<void> testLoadingState(WidgetTester tester) async {
-    when(() => repository.getEventOptions());
+    when(() => repository.getEventOptions()).thenAnswer(
+      (invocation) => Future.value([])..ignore(),
+    );
 
     await TestUtils.pumpApp(tester, repository: repository);
+
+    await tester.pumpAndSettle();
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     expect(find.text("No events found"), findsNothing);
@@ -26,6 +31,8 @@ class HomeScreenTestCases {
         .thenThrow(Exception("An error occurred"));
 
     await TestUtils.pumpApp(tester, repository: repository);
+
+    await tester.pumpAndSettle();
 
     expect(find.byType(MaterialBanner), findsOneWidget);
     expect(find.text("An error occurred"), findsOneWidget);
@@ -66,12 +73,57 @@ class HomeScreenTestCases {
     expect(find.byType(MaterialBanner), findsNothing);
   }
 
-  Future<void> testSnackbarDismissedOnButtonPressed(
-      WidgetTester tester) async {}
+  Future<void> testMaterialBannerDismissedOnCancelPressed(
+      WidgetTester tester) async {
+    when(() => repository.getEventOptions())
+        .thenThrow(Exception("An error occurred"));
 
-  Future<void> testFABPressed(WidgetTester tester) async {}
+    await TestUtils.pumpApp(tester, repository: repository);
 
-  Future<void> testOnItemDraggedDelete(WidgetTester tester) async {}
+    await tester.tap(find.byKey(const ValueKey('closeBanner')));
+
+    await tester.pumpAndSettle();
+
+    expect(find.byType(MaterialBanner), findsNothing);
+    expect(find.text("An error occurred"), findsNothing);
+  }
+
+  Future<void> testFABPressed(WidgetTester tester) async {
+    List<String> navigatorEntries = [];
+
+    TestNavigatorObserver navigatorObserver = TestNavigatorObserver()
+      ..onPushed = (route, _) {
+        navigatorEntries.add(route.settings.name ?? '');
+      };
+
+    await TestUtils.pumpApp(
+      tester,
+      repository: repository,
+      observer: navigatorObserver,
+    );
+
+    await tester.tap(find.byType(FloatingActionButton));
+
+    // await tester.pumpAndSettle();
+
+    expect(navigatorEntries.isNotEmpty, true);
+    expect(navigatorEntries, [AddOptionScreen.pageName]);
+  }
+
+  Future<void> testOnItemDraggedDelete(WidgetTester tester) async {
+    when(() => repository.getEventOptions()).thenAnswer(
+      (_) => Future.value(_data),
+    );
+
+    await TestUtils.pumpApp(tester, repository: repository);
+
+    await tester.drag(find.byKey(const Key("id1")), const Offset(-700, 0));
+
+    expect(find.byKey(const Key("id1")), findsNothing);
+
+    expect(find.byKey(const Key("id2")), findsOneWidget);
+    expect(find.byKey(const Key("id3")), findsOneWidget);
+  }
 
   List<CalendarEventOption> get _data {
     return [

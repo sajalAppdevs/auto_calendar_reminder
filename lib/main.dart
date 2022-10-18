@@ -18,9 +18,14 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.dataController});
+  const MyApp({
+    super.key,
+    required this.dataController,
+    this.navigatorObserver,
+  });
 
   final AppDataController dataController;
+  final NavigatorObserver? navigatorObserver;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +33,7 @@ class MyApp extends StatelessWidget {
       dataController: dataController,
       child: MaterialApp(
         title: 'Auto Calendar',
+        navigatorObservers: [if (navigatorObserver != null) navigatorObserver!],
         theme: ThemeData(
           useMaterial3: true,
           primarySwatch: Colors.orange,

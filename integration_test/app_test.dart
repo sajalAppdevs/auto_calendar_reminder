@@ -1,30 +1,54 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 
-import 'package:auto_calendar_reminder/main.dart';
+import '../test/util.dart';
+import 'home_screen_test.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  
+  late MockAppRepository repository;
+  // late AppDataController dataController;
+  late HomeScreenTestCases homeScreenTestCases;
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  setUp(
+    () {
+      repository = MockAppRepository();
+      // dataController = AppDataController(repository: repository);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      homeScreenTestCases = HomeScreenTestCases(repository);
+    },
+  );
+  group(
+    "Test HomeScreen",
+    () {
+      // testWidgets(
+      //   'Ensure CircularProgressIndicator shows in loading state',
+      //   (WidgetTester tester) async {
+      //     await homeScreenTestCases.testLoadingState(tester);
+      //   },
+      // );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+      testWidgets(
+        'Ensure error material banner shows in error state',
+        (WidgetTester tester) async {
+          await homeScreenTestCases.testErrorState(tester);
+        },
+      );
+
+      // testWidgets(
+      //   'Ensure error empty list text shows when list empty',
+      //   (WidgetTester tester) async {
+      //     await homeScreenTestCases.testEmptyState(tester);
+      //   },
+      // );
+
+      // testWidgets(
+      //   'Ensure listview  shows when events successfully loads',
+      //   (WidgetTester tester) async {
+      //     await homeScreenTestCases.testDataLoadedState(tester);
+      //   },
+      // );
+    },
+  );
 }

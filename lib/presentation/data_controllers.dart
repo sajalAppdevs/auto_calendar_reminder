@@ -33,6 +33,9 @@ class AppDataController extends BaseDataController<EventOptionList> {
   Future<void> _loadOptions({String? successText}) async {
     try {
       final options = await repository.getEventOptions();
+
+      print("DATA CONTROLLER OPTIONS ============= $options");
+
       state = _state.successState(options, successText: successText);
     } catch (e) {
       state = _state.errorState("An error occurred");

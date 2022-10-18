@@ -49,6 +49,7 @@ class HomeScreenState extends State<HomeScreen> {
 
               if (state.error != null) {
                 context.showBanner(state.error!);
+                return const SizedBox.shrink();
               }
 
               final options = state.data;

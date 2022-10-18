@@ -13,26 +13,24 @@ extension BuildContextExt on BuildContext {
 
   void showBanner(String text) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-     ScaffoldMessenger.of(this).showMaterialBanner(
+      ScaffoldMessenger.of(this).showMaterialBanner(
         MaterialBanner(
           content: Text(text),
           actions: [
-            Builder(
-              builder: (context) {
-                return InkWell(
-                    onTap: () => ScaffoldMessenger.of(context).clearMaterialBanners(),
-                    child: const Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Icon(Icons.close),
-                    ));
-              }
-            )
+            Builder(builder: (context) {
+              return InkWell(
+                  key: const ValueKey('closeBanner'),
+                  onTap: () =>
+                      ScaffoldMessenger.of(context).clearMaterialBanners(),
+                  child: const Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Icon(Icons.close),
+                  ));
+            })
           ],
           backgroundColor: Theme.of(this).splashColor,
         ),
       );
-
-  
     });
   }
 
