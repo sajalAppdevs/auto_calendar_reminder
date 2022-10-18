@@ -24,6 +24,12 @@ class AppDataController extends BaseDataController<EventOptionList> {
 
   final AppRepository repository;
 
+  @visibleForTesting
+  @override
+  set state(AppState<EventOptionList> newState) {
+    super.state = newState;
+  }
+
   void loadEventOptions() async {
     state = _state.loadingState(true);
 
@@ -38,6 +44,11 @@ class AppDataController extends BaseDataController<EventOptionList> {
     } catch (e) {
       state = _state.errorState("An error occurred");
     }
+  }
+
+  void removeEvent(String id) {
+    _data.removeWhere((element) => element.id == id);
+    notifyListeners();
   }
 }
 
@@ -55,7 +66,7 @@ class ActionsDataController extends BaseDataController<bool?> {
     bool successful = await controller.repository.deleteOptions(optionId);
 
     if (successful) {
-      controller.state.data.removeWhere((element) => element.id == optionId);
+      controller.removeEvent(optionId);
 
       state = _state.successState(successful,
           successText: "Successfully deleted event option");
