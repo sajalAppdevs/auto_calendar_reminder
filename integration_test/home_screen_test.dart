@@ -120,12 +120,13 @@ class HomeScreenTestCases {
 
     await tester.drag(find.byKey(const Key("id1")), const Offset(-700, 0));
 
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(const Duration(seconds: 6));
 
-    expect(find.byKey(const Key("id1")), findsNothing);
 
     expect(find.byKey(const Key("id2")), findsOneWidget);
     expect(find.byKey(const Key("id3")), findsOneWidget);
+
+    expect(find.byKey(const Key("id1")), findsNothing);
   }
 
   void _doWhenGetEventOptionsCalled(
