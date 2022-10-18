@@ -33,6 +33,7 @@ class AppDataController extends BaseDataController<EventOptionList> {
   Future<void> _loadOptions({String? successText}) async {
     try {
       final options = await repository.getEventOptions();
+
       state = _state.successState(options, successText: successText);
     } catch (e) {
       state = _state.errorState("An error occurred");
@@ -54,9 +55,10 @@ class ActionsDataController extends BaseDataController<bool?> {
     bool successful = await controller.repository.deleteOptions(optionId);
 
     if (successful) {
+      controller.state.data.removeWhere((element) => element.id == optionId);
+
       state = _state.successState(successful,
           successText: "Successfully deleted event option");
-      controller._loadOptions();
     } else {
       state = _state.errorState("Deleting option failed!");
     }
