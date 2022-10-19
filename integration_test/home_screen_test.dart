@@ -3,6 +3,7 @@ import 'package:auto_calendar_reminder/ext.dart';
 import 'package:auto_calendar_reminder/presentation/add_option_screen.dart';
 import 'package:auto_calendar_reminder/presentation/data_controllers.dart';
 import 'package:auto_calendar_reminder/presentation/home_screen.dart';
+import 'package:auto_calendar_reminder/presentation/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -14,6 +15,16 @@ class HomeScreenTestCases {
 
   final MockAppRepository repository;
 
+  Future<void> testProvidersInjected(WidgetTester tester) async {
+    _doWhenGetEventOptionsCalled(data: []);
+
+    await TestUtils.pumpApp(tester, repository: repository);
+
+    expect(find.byType(AppProvider<ActionsDataController>), findsOneWidget);
+    expect(find.byType(AppProvider<AppDataController>), findsOneWidget);
+    expect(find.text("Events Options"), findsOneWidget);
+  }
+
   Future<void> testLoadingState(WidgetTester tester) async {
     _doWhenGetEventOptionsCalled(data: []);
 
@@ -22,7 +33,7 @@ class HomeScreenTestCases {
     final dataController =
         tester.state(find.byType(HomeScreen)).context.appDataController;
 
-    dataController.state = AppState<EventOptionList>(data: [], loading: true);
+    dataController.state = UIState<EventOptionList>(data: [], loading: true);
 
     await tester.pump(const Duration(milliseconds: 100));
 
@@ -30,6 +41,8 @@ class HomeScreenTestCases {
     expect(find.text("No events found"), findsNothing);
     expect(find.byType(ListView), findsNothing);
     expect(find.byType(MaterialBanner), findsNothing);
+
+    verify(() => repository.getEventOptions());
   }
 
   Future<void> testErrorState(WidgetTester tester) async {
@@ -43,6 +56,8 @@ class HomeScreenTestCases {
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.text("No events found"), findsNothing);
     expect(find.byType(ListView), findsNothing);
+
+    verify(() => repository.getEventOptions());
   }
 
   Future<void> testEmptyState(WidgetTester tester) async {
@@ -55,6 +70,8 @@ class HomeScreenTestCases {
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.byType(ListView), findsNothing);
     expect(find.byType(MaterialBanner), findsNothing);
+
+    verify(() => repository.getEventOptions());
   }
 
   Future<void> testDataLoadedState(WidgetTester tester) async {
@@ -71,6 +88,8 @@ class HomeScreenTestCases {
     expect(find.text("No events found"), findsNothing);
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.byType(MaterialBanner), findsNothing);
+
+    verify(() => repository.getEventOptions());
   }
 
   Future<void> testMaterialBannerDismissedOnCancelPressed(
@@ -126,6 +145,8 @@ class HomeScreenTestCases {
     expect(find.byKey(const Key("id3")), findsOneWidget);
 
     expect(find.byKey(const Key("id1")), findsNothing);
+
+    verify(() => repository.deleteOptions('id1'));
   }
 
   void _doWhenGetEventOptionsCalled(

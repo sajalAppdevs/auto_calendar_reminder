@@ -23,15 +23,16 @@ class AddOptionScreenState extends State<AddOptionScreen> {
   final _dateController = TextEditingController();
   final _iconLinkController = TextEditingController();
 
-  late final _actionsDataController =
+  @visibleForTesting
+  late final actionsDataController =
       ActionsDataController(controller: context.appDataController);
 
   @override
   void initState() {
     super.initState();
 
-    _actionsDataController.addListener(() {
-      final state = _actionsDataController.state;
+    actionsDataController.addListener(() {
+      final state = actionsDataController.state;
 
       if (state.successText != null) {
         context.showBanner(state.successText!);
@@ -44,7 +45,7 @@ class AddOptionScreenState extends State<AddOptionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Events Options")),
+      appBar: AppBar(title: const Text("Create Events Options")),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -108,14 +109,14 @@ class AddOptionScreenState extends State<AddOptionScreen> {
                     _descriptionController,
                     _iconLinkController,
                     _dateController,
-                    _actionsDataController,
+                    actionsDataController,
                   ],
                 ),
                 enable: _enableButton,
                 onPress: () {
                   _saveEventOption();
                 },
-                loading: () => _actionsDataController.state.loading,
+                loading: () => actionsDataController.state.loading,
               ),
             ),
             const SizedBox(height: 24),
@@ -126,7 +127,7 @@ class AddOptionScreenState extends State<AddOptionScreen> {
   }
 
   void _saveEventOption() {
-    _actionsDataController.addEventOption(
+    actionsDataController.addEventOption(
       CalendarEventOption(
         optionName: _nameController.text,
         optionDescription: _descriptionController.text,
@@ -138,7 +139,7 @@ class AddOptionScreenState extends State<AddOptionScreen> {
   }
 
   bool _enableButton() {
-    return !_actionsDataController.state.loading &&
+    return !actionsDataController.state.loading &&
         _hasText(_nameController) &&
         _hasText(_descriptionController) &&
         _hasText(_iconLinkController) &&
@@ -181,7 +182,7 @@ class AddOptionScreenState extends State<AddOptionScreen> {
     _descriptionController.dispose();
     _dateController.dispose();
     _iconLinkController.dispose();
-    _actionsDataController.dispose();
+    actionsDataController.dispose();
     super.dispose();
   }
 }

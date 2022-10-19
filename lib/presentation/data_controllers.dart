@@ -7,16 +7,16 @@ abstract class BaseDataController<T> extends ChangeNotifier {
 
   final T _data;
 
-  late AppState<T> _state = AppState<T>(data: _data);
+  late UIState<T> _state = UIState<T>(data: _data);
 
-  set state(AppState<T> newState) {
+  set state(UIState<T> newState) {
     if (newState == _state) return;
 
     _state = newState;
     notifyListeners();
   }
 
-  AppState<T> get state => _state;
+  UIState<T> get state => _state;
 }
 
 class AppDataController extends BaseDataController<EventOptionList> {
@@ -26,7 +26,7 @@ class AppDataController extends BaseDataController<EventOptionList> {
 
   @visibleForTesting
   @override
-  set state(AppState<EventOptionList> newState) {
+  set state(UIState<EventOptionList> newState) {
     super.state = newState;
   }
 
@@ -91,8 +91,8 @@ class ActionsDataController extends BaseDataController<bool?> {
   }
 }
 
-class AppState<T> {
-  AppState(
+class UIState<T> {
+  UIState(
       {required this.data, this.error, this.successText, this.loading = false});
 
   final T data;
@@ -100,22 +100,22 @@ class AppState<T> {
   final String? successText;
   final bool loading;
 
-  AppState<T> loadingState(bool isLoading) =>
+  UIState<T> loadingState(bool isLoading) =>
       copyWith(loading: isLoading, error: null, successText: null);
 
-  AppState<T> errorState(String error) =>
+  UIState<T> errorState(String error) =>
       copyWith(loading: false, successText: null, error: error);
 
-  AppState<T> successState(T data, {String? successText}) => copyWith(
+  UIState<T> successState(T data, {String? successText}) => copyWith(
       loading: false, error: null, data: data, successText: successText);
 
-  AppState<T> copyWith({
+  UIState<T> copyWith({
     T? data,
     String? error,
     bool? loading,
     String? successText,
   }) {
-    return AppState(
+    return UIState(
       data: data ?? this.data,
       error: error ?? this.error,
       loading: loading ?? this.loading,
@@ -127,7 +127,7 @@ class AppState<T> {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is AppState &&
+    return other is UIState &&
         other.data == data &&
         other.error == error &&
         other.loading == loading &&

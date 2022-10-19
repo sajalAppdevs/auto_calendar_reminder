@@ -1,10 +1,3 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:auto_calendar_reminder/domain/domain_export.dart';
 import 'package:auto_calendar_reminder/presentation/widgets/item_reminder_option.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +27,12 @@ void main() {
     expect(find.byKey(const Key("id")), findsOneWidget);
     expect(find.text("Coffee Break"), findsOneWidget);
     expect(find.text("Description\nOct 14, 2022"), findsOneWidget);
-    expect(find.byType(CircleAvatar), findsOneWidget);
-    expect(find.image(const NetworkImage("iconUrl")), findsOneWidget);
+
+    final circleAvatarFinder = find.byType(CircleAvatar);
+    expect(circleAvatarFinder, findsOneWidget);
+    expect(
+      (tester.widget(circleAvatarFinder) as CircleAvatar).backgroundImage,
+      const NetworkImage("iconUrl"),
+    );
   });
 }

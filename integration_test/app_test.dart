@@ -1,25 +1,38 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../test/util.dart';
+import 'add_option_screen_test.dart';
 import 'home_screen_test.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
+  registerFallbackValue(FakeCalendarEventOption());
+
   late MockAppRepository repository;
   late HomeScreenTestCases homeScreenTestCases;
+  late AddOptionScreenTestCases addOptionScreenTestCases;
 
   setUp(
     () {
       repository = MockAppRepository();
 
       homeScreenTestCases = HomeScreenTestCases(repository);
+      addOptionScreenTestCases = AddOptionScreenTestCases(repository);
     },
   );
   group(
     "Test HomeScreen",
     () {
+      testWidgets(
+        'Ensure AppProviders injected in widget tree',
+        (WidgetTester tester) async {
+          await homeScreenTestCases.testProvidersInjected(tester);
+        },
+      );
+
       testWidgets(
         'Ensure CircularProgressIndicator shows in loading state',
         (WidgetTester tester) async {
@@ -67,6 +80,46 @@ void main() {
         "Ensure event item is deleted when ListTile dragged",
         (tester) async {
           await homeScreenTestCases.testOnItemDraggedDelete(tester);
+        },
+      );
+    },
+  );
+
+  group(
+    "Test AddOptionScreen",
+    () {
+      testWidgets(
+        'Ensure AppBar exist',
+        (WidgetTester tester) async {
+          await addOptionScreenTestCases.testAppBarExist(tester);
+        },
+      );
+
+      testWidgets(
+        'Ensure DatePicker is used on android and CupertinoDatePicker for iOS',
+        (WidgetTester tester) async {
+          await addOptionScreenTestCases.testDatePicker(tester);
+        },
+      );
+
+      testWidgets(
+        'Ensure AppButton is disabled when text fields not filled and enabled when all fields inputted',
+        (WidgetTester tester) async {
+          await addOptionScreenTestCases.testButtonState(tester);
+        },
+      );
+
+      testWidgets(
+        'Ensure UI corresponds to the UIState',
+        (WidgetTester tester) async {
+          await addOptionScreenTestCases.testScreenUIState(tester);
+        },
+      );
+
+      testWidgets(
+        'Test save button tapped ',
+        (WidgetTester tester) async {
+          await addOptionScreenTestCases.testSaveAction(tester);
         },
       );
     },

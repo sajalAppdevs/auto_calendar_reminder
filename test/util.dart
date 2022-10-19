@@ -8,9 +8,13 @@ import 'package:network_image_mock/network_image_mock.dart';
 
 class MockAppRepository extends Mock implements AppRepository {}
 
+class FakeCalendarEventOption extends Fake implements CalendarEventOption {}
+
 class TestUtils {
   static Future<void> pumpApp(WidgetTester tester,
-      {required AppRepository repository, NavigatorObserver? observer}) async {
+      {required AppRepository repository,
+      bool navigateToScreen2 = false,
+      NavigatorObserver? observer}) async {
     await mockNetworkImagesFor(
       () => tester.pumpWidget(
         MyApp(
@@ -20,6 +24,9 @@ class TestUtils {
       ),
     );
 
+    if(navigateToScreen2){
+      await tester.tap(find.byType(FloatingActionButton));
+    }
     await tester.pumpAndSettle();
   }
 }
