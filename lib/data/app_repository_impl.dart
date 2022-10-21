@@ -13,8 +13,6 @@ class AppRepositoryImpl extends AppRepository {
     return sharedPref.setString(option.id.toString(), option.toJson());
   }
 
-
-
   @override
   Future<EventOptionList> getEventOptions() async {
     final list = <CalendarEventOption>[];
@@ -23,7 +21,6 @@ class AppRepositoryImpl extends AppRepository {
       final json = sharedPref.getString(key);
 
       if (json != null) {
-        print("JSON: $json");
         final item = CalendarEventOption.fromJson(json);
         list.add(item);
       }

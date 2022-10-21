@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../test/util.dart';
+import 'test_util.dart';
 
 class AddOptionScreenTestCases {
   AddOptionScreenTestCases(this.repository);
