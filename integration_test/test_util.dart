@@ -3,12 +3,7 @@ import 'package:auto_calendar_reminder/main.dart';
 import 'package:auto_calendar_reminder/presentation/data_controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:network_image_mock/network_image_mock.dart';
-
-class MockAppRepository extends Mock implements AppRepository {}
-
-class FakeCalendarEventOption extends Fake implements CalendarEventOption {}
 
 class TestUtils {
   static Future<void> pumpApp(WidgetTester tester,
@@ -24,7 +19,7 @@ class TestUtils {
       ),
     );
 
-    if(navigateToScreen2){
+    if (navigateToScreen2) {
       await tester.tap(find.byType(FloatingActionButton));
     }
     await tester.pumpAndSettle();

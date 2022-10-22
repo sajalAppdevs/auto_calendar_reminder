@@ -1,28 +1,26 @@
+import 'package:auto_calendar_reminder/data/fake_app_repository_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:mocktail/mocktail.dart';
 
-import 'test_util.dart';
 import 'add_option_screen_test.dart';
 import 'home_screen_test.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  registerFallbackValue(FakeCalendarEventOption());
-
-  late MockAppRepository repository;
+  late FakeAppRepository repository;
   late HomeScreenTestCases homeScreenTestCases;
   late AddOptionScreenTestCases addOptionScreenTestCases;
 
   setUp(
-    () {
-      repository = MockAppRepository();
+    () async {
+      repository = FakeAppRepository();
 
       homeScreenTestCases = HomeScreenTestCases(repository);
       addOptionScreenTestCases = AddOptionScreenTestCases(repository);
     },
   );
+
   group(
     "Test HomeScreen",
     () {
@@ -88,7 +86,6 @@ void main() {
   group(
     "Test AddOptionScreen",
     () {
-
       testWidgets(
         'Ensure DatePicker is used on android and CupertinoDatePicker for iOS',
         (WidgetTester tester) async {

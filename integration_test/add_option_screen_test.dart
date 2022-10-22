@@ -1,18 +1,17 @@
+import 'package:auto_calendar_reminder/domain/domain_export.dart';
 import 'package:auto_calendar_reminder/presentation/add_option_screen.dart';
 import 'package:auto_calendar_reminder/presentation/data_controllers.dart';
 import 'package:auto_calendar_reminder/presentation/widgets/app_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
 import 'test_util.dart';
 
 class AddOptionScreenTestCases {
   AddOptionScreenTestCases(this.repository);
 
-  final MockAppRepository repository;
-
+  final AppRepository repository;
 
   Future<void> testDatePicker(WidgetTester tester) async {
     List<Route> navigatorEntries = [];
@@ -75,9 +74,6 @@ class AddOptionScreenTestCases {
   }
 
   Future<void> _expectButtonDisabled(WidgetTester tester) async {
-    when(() => repository.addOptions(any()))
-        .thenAnswer((_) => Future.value(false));
-
     expect(tester.widget<AppButton>(find.byType(AppButton)).enable(), false);
 
     expect(
@@ -90,8 +86,6 @@ class AddOptionScreenTestCases {
     await tester.tap(find.byType(RawMaterialButton));
 
     await tester.pumpAndSettle();
-
-    verifyNever(() => repository.addOptions(any()));
   }
 
   Future<void> _expectButtonEnabled(WidgetTester tester) async {
@@ -122,7 +116,6 @@ class AddOptionScreenTestCases {
 
     expect(tester.widget<AppButton>(find.byType(AppButton)).loading(), true);
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
-
   }
 
   void _updateScreenState(WidgetTester tester, UIState<bool> state) {
@@ -133,12 +126,6 @@ class AddOptionScreenTestCases {
   }
 
   Future<void> testSaveAction(WidgetTester tester) async {
-    when(() => repository.addOptions(any()))
-        .thenAnswer((_) => Future.value(true));
-
-    when(() => repository.getEventOptions())
-        .thenAnswer((_) => Future.value([]));
-
     TestNavigatorObserver navigatorObserver = TestNavigatorObserver()
       ..onPopped = (route, prevRoute) {
         if (route.runtimeType != CupertinoModalPopupRoute<void>) {
@@ -166,8 +153,6 @@ class AddOptionScreenTestCases {
     await tester.tap(find.byType(RawMaterialButton));
 
     await tester.pumpAndSettle();
-
-    verify(() => repository.addOptions(any()));
   }
 
   Future<void> _selectDateOnCalendar(WidgetTester tester) async {
