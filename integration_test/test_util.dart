@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class TestUtils {
-  static Future<void> pumpApp(WidgetTester tester,
-      {required AppRepository repository,
-      bool navigateToScreen2 = false,
-      NavigatorObserver? observer}) async {
+  static Future<void> pumpApp(
+    WidgetTester tester, {
+    required AppRepository repository,
+    bool navigateToScreen2 = false,
+    NavigatorObserver? observer,
+  }) async {
+    
     await tester.pumpWidget(
       MyApp(
         dataController: AppDataController(repository: repository),
