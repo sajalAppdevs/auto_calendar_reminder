@@ -88,12 +88,6 @@ void main() {
   group(
     "Test AddOptionScreen",
     () {
-      testWidgets(
-        'Ensure AppBar exist',
-        (WidgetTester tester) async {
-          await addOptionScreenTestCases.testAppBarExist(tester);
-        },
-      );
 
       testWidgets(
         'Ensure DatePicker is used on android and CupertinoDatePicker for iOS',

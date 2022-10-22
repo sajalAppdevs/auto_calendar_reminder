@@ -22,7 +22,6 @@ class HomeScreenTestCases {
 
     expect(find.byType(AppProvider<ActionsDataController>), findsOneWidget);
     expect(find.byType(AppProvider<AppDataController>), findsOneWidget);
-    expect(find.text("Events Options"), findsOneWidget);
   }
 
   Future<void> testLoadingState(WidgetTester tester) async {

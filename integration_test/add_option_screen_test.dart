@@ -13,15 +13,6 @@ class AddOptionScreenTestCases {
 
   final MockAppRepository repository;
 
-  Future<void> testAppBarExist(WidgetTester tester) async {
-    await TestUtils.pumpApp(
-      tester,
-      repository: repository,
-      navigateToScreen2: true,
-    );
-
-    expect(find.text("Create Events Options"), findsOneWidget);
-  }
 
   Future<void> testDatePicker(WidgetTester tester) async {
     List<Route> navigatorEntries = [];
