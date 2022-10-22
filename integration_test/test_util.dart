@@ -3,19 +3,16 @@ import 'package:auto_calendar_reminder/main.dart';
 import 'package:auto_calendar_reminder/presentation/data_controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:network_image_mock/network_image_mock.dart';
 
 class TestUtils {
   static Future<void> pumpApp(WidgetTester tester,
       {required AppRepository repository,
       bool navigateToScreen2 = false,
       NavigatorObserver? observer}) async {
-    await mockNetworkImagesFor(
-      () => tester.pumpWidget(
-        MyApp(
-          dataController: AppDataController(repository: repository),
-          navigatorObserver: observer,
-        ),
+    await tester.pumpWidget(
+      MyApp(
+        dataController: AppDataController(repository: repository),
+        navigatorObserver: observer,
       ),
     );
 
