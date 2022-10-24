@@ -69,13 +69,13 @@ class _AppButtonFinder extends MatchFinder {
       candidate.findAncestorWidgetOfExactType<AppButton>() != null;
 }
 
-/// A matcher that validates that button is in loading state
+/// A matcher that validates that button is in loading state used alongside [appButtonFinder]
 const findsAppButtonInLoadingState = _AddButtonLoadingStateMatcher();
 
-/// A matcher that validates that button is enabled
+/// A matcher that validates that button is enabled used alongside [appButtonFinder]
 const findsAppButtonInEnabledState = _AddButtonEnabledStateMatcher();
 
-/// A matcher that validates that button is disabled
+/// A matcher that validates that button is disabled used alongside [appButtonFinder]
 const findsAppButtonInDisabledState = _AddButtonDisabledStateMatcher();
 
 abstract class _AddButtonStateMatcher extends Matcher {
@@ -89,8 +89,6 @@ abstract class _AddButtonStateMatcher extends Matcher {
 
   @override
   bool matches(covariant Finder finder, Map matchState) {
-    matchState[Finder] = finder;
-
     final element = finder.evaluate().single;
 
     if (element.widget is! RawMaterialButton) return false;
