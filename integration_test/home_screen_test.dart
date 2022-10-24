@@ -83,6 +83,8 @@ class HomeScreenTestCases {
 
     await TestUtils.pumpApp(tester, repository: repository);
 
+    expect(find.byType(MaterialBanner), findsOneWidget);
+
     await tester.tap(find.byIcon(Icons.close));
 
     await tester.pumpAndSettle();
