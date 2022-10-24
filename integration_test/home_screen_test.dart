@@ -83,7 +83,7 @@ class HomeScreenTestCases {
 
     await TestUtils.pumpApp(tester, repository: repository);
 
-    await tester.tap(find.byKey(const ValueKey('closeBanner')));
+    await tester.tap(find.byIcon(Icons.close));
 
     await tester.pumpAndSettle();
 

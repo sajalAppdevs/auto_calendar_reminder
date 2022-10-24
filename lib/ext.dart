@@ -19,7 +19,6 @@ extension BuildContextExt on BuildContext {
           actions: [
             Builder(builder: (context) {
               return InkWell(
-                  key: const ValueKey('closeBanner'),
                   onTap: () =>
                       ScaffoldMessenger.of(context).clearMaterialBanners(),
                   child: const Padding(
