@@ -24,11 +24,7 @@ class AppButton extends StatelessWidget {
         animation: listenable,
         builder: (context, _) {
           return RawMaterialButton(
-            onPressed: () {
-              if (enable()) {
-                onPress();
-              }
-            },
+            onPressed: enable() ? () => onPress() : null,
             fillColor:
                 enable() ? Theme.of(context).primaryColor : Colors.grey[300],
             shape: RoundedRectangleBorder(

@@ -1,7 +1,6 @@
 import 'package:auto_calendar_reminder/domain/domain_export.dart';
 import 'package:auto_calendar_reminder/presentation/add_option_screen.dart';
 import 'package:auto_calendar_reminder/presentation/data_controllers.dart';
-import 'package:auto_calendar_reminder/presentation/widgets/app_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -48,59 +47,29 @@ class AddOptionScreenTestCases {
       navigateToScreen2: true,
     );
 
-    await _expectButtonDisabled(tester);
+    expect(appButtonFinder, findsAppButtonInDisabledState);
 
     await _setTextField(tester, 'optionNameField', 'Coffee Break');
 
-    await _expectButtonDisabled(tester);
+    expect(appButtonFinder, findsAppButtonInDisabledState);
 
     await _setTextField(tester, 'descriptionField', 'Remember to take breaks');
 
-    await _expectButtonDisabled(tester);
+    expect(appButtonFinder, findsAppButtonInDisabledState);
 
     await _setTextField(tester, 'iconField',
         'https://cdn-icons-png.flaticon.com/512/1792/1792931.png');
 
-    await _expectButtonDisabled(tester);
+    expect(appButtonFinder, findsAppButtonInDisabledState);
 
     await _selectDateOnCalendar(tester);
 
-    await _expectButtonEnabled(tester);
+    expect(appButtonFinder, findsAppButtonInEnabledState);
   }
 
   Future<void> _setTextField(
       WidgetTester tester, String key, String text) async {
     await tester.enterText(find.byKey(ValueKey(key)), text);
-  }
-
-  Future<void> _expectButtonDisabled(WidgetTester tester) async {
-    expect(tester.widget<AppButton>(find.byType(AppButton)).enable(), false);
-
-    expect(
-      tester
-          .widget<RawMaterialButton>(find.byType(RawMaterialButton))
-          .fillColor,
-      Colors.grey[300],
-    );
-
-    await tester.tap(find.byType(RawMaterialButton));
-
-    await tester.pumpAndSettle();
-  }
-
-  Future<void> _expectButtonEnabled(WidgetTester tester) async {
-    await tester.pumpAndSettle();
-
-    expect(tester.widget<AppButton>(find.byType(AppButton)).enable(), true);
-
-    final context = tester.state(find.byType(AddOptionScreen)).context;
-
-    expect(
-      tester
-          .widget<RawMaterialButton>(find.byType(RawMaterialButton))
-          .fillColor,
-      Theme.of(context).primaryColor,
-    );
   }
 
   Future<void> testScreenUIState(WidgetTester tester) async {
@@ -114,8 +83,7 @@ class AddOptionScreenTestCases {
 
     await tester.pump();
 
-    expect(tester.widget<AppButton>(find.byType(AppButton)).loading(), true);
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(appButtonFinder, findsAppButtonInLoadingState);
   }
 
   void _updateScreenState(WidgetTester tester, UIState<bool> state) {
