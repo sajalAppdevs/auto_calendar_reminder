@@ -1,5 +1,5 @@
 import 'package:auto_calendar_reminder/data/app_repository_impl.dart';
-import 'package:auto_calendar_reminder/presentation/add_option_screen.dart';
+import 'package:auto_calendar_reminder/presentation/create_option_screen.dart';
 import 'package:auto_calendar_reminder/presentation/home_screen.dart';
 import 'package:auto_calendar_reminder/presentation/provider.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         ),
         home: const HomeScreen(),
         routes: {
-          AddOptionScreen.pageName: (context) => const AddOptionScreen()
+          CreateOptionScreen.pageName: (context) => const CreateOptionScreen()
         },
       ),
     );

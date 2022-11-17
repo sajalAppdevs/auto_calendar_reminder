@@ -2,7 +2,7 @@ import 'package:auto_calendar_reminder/data/fake_app_repository_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
-import 'add_option_screen_test.dart';
+import 'create_option_screen_test.dart';
 import 'home_screen_test.dart';
 
 void main() {
@@ -10,14 +10,14 @@ void main() {
 
   late FakeAppRepository repository;
   late HomeScreenTestCases homeScreenTestCases;
-  late AddOptionScreenTestCases addOptionScreenTestCases;
+  late CreateOptionScreenTestCases addOptionScreenTestCases;
 
   setUp(
     () async {
       repository = FakeAppRepository();
 
       homeScreenTestCases = HomeScreenTestCases(repository);
-      addOptionScreenTestCases = AddOptionScreenTestCases(repository);
+      addOptionScreenTestCases = CreateOptionScreenTestCases(repository);
     },
   );
 
@@ -84,7 +84,7 @@ void main() {
   );
 
   group(
-    "Test AddOptionScreen",
+    "Test CreateOptionScreen",
     () {
       testWidgets(
         'Ensure DatePicker is used on android and CupertinoDatePicker for iOS',

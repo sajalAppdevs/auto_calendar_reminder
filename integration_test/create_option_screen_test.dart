@@ -1,5 +1,5 @@
 import 'package:auto_calendar_reminder/domain/domain_export.dart';
-import 'package:auto_calendar_reminder/presentation/add_option_screen.dart';
+import 'package:auto_calendar_reminder/presentation/create_option_screen.dart';
 import 'package:auto_calendar_reminder/presentation/data_controllers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +7,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'test_util.dart';
 
-class AddOptionScreenTestCases {
-  AddOptionScreenTestCases(this.repository);
+class CreateOptionScreenTestCases {
+  CreateOptionScreenTestCases(this.repository);
 
   final AppRepository repository;
 
@@ -31,7 +31,7 @@ class AddOptionScreenTestCases {
 
     await tester.pumpAndSettle();
 
-    final context = tester.state(find.byType(AddOptionScreen)).context;
+    final context = tester.state(find.byType(CreateOptionScreen)).context;
 
     if (Theme.of(context).platform == TargetPlatform.android) {
       expect(navigatorEntries.last.runtimeType, DialogRoute<DateTime>);
@@ -88,7 +88,7 @@ class AddOptionScreenTestCases {
 
   void _updateScreenState(WidgetTester tester, UIState<bool> state) {
     tester
-        .state<AddOptionScreenState>(find.byType(AddOptionScreen))
+        .state<CreateOptionScreenState>(find.byType(CreateOptionScreen))
         .actionsDataController
         .state = state;
   }
@@ -97,7 +97,7 @@ class AddOptionScreenTestCases {
     TestNavigatorObserver navigatorObserver = TestNavigatorObserver()
       ..onPopped = (route, prevRoute) {
         if (route.runtimeType != CupertinoModalPopupRoute<void>) {
-          expect(route.settings.name, AddOptionScreen.pageName);
+          expect(route.settings.name, CreateOptionScreen.pageName);
           expect(prevRoute?.settings.name, '/');
         }
       };
@@ -128,7 +128,7 @@ class AddOptionScreenTestCases {
 
     await tester.pumpAndSettle();
 
-    final context = tester.state(find.byType(AddOptionScreen)).context;
+    final context = tester.state(find.byType(CreateOptionScreen)).context;
 
     if (Theme.of(context).platform == TargetPlatform.android) {
       await tester.tap(find.text("OK"));

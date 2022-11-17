@@ -1,5 +1,5 @@
 import 'package:auto_calendar_reminder/ext.dart';
-import 'package:auto_calendar_reminder/presentation/add_option_screen.dart';
+import 'package:auto_calendar_reminder/presentation/create_option_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'data_controllers.dart';
@@ -69,7 +69,7 @@ class HomeScreenState extends State<HomeScreen> {
             }),
         floatingActionButton: FloatingActionButton(
           onPressed: () =>
-              Navigator.pushNamed(context, AddOptionScreen.pageName),
+              Navigator.pushNamed(context, CreateOptionScreen.pageName),
           child: const Icon(
             Icons.add,
             size: 24,

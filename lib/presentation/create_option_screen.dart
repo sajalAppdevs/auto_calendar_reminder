@@ -7,17 +7,17 @@ import 'package:flutter/material.dart';
 
 import 'widgets/app_textfield.dart';
 
-class AddOptionScreen extends StatefulWidget {
-  static String pageName = 'addOptionScreen';
+class CreateOptionScreen extends StatefulWidget {
+  static String pageName = 'createOptionScreen';
 
-  const AddOptionScreen({super.key});
+  const CreateOptionScreen({super.key});
 
   @override
-  State<AddOptionScreen> createState() => AddOptionScreenState();
+  State<CreateOptionScreen> createState() => CreateOptionScreenState();
 }
 
 @visibleForTesting
-class AddOptionScreenState extends State<AddOptionScreen> {
+class CreateOptionScreenState extends State<CreateOptionScreen> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _dateController = TextEditingController();
